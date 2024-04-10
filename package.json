@@ -1,0 +1,21 @@
+{
+  "name": "server-express-mongo-car",
+  "version": "1.0.0",
+  "description": "",
+  "privet": true,
+  "scripts": {
+    "start": "nodemon ./server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-errors": "^2.0.0",
+    "mongoose": "^8.3.1",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
