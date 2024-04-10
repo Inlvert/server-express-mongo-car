@@ -13,13 +13,15 @@ const carSchema = new Schema ({
     type: Date
   },
   km: {
-    type: Number
+    type: Number,
+    default: 0
   },
   color: {
     type: String
   },
   isInsurance: {
-    type: Boolean
+    type: Boolean,
+    required: true
   }
 }, {
   timestamps: true
