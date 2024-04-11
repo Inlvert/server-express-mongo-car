@@ -10,13 +10,17 @@ const reviewSchema = new Schema ({
     required: true
   },
   autor: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: 'Car'
   },
   isRecomendate: {
     type: Boolean,
     default: false
+  },
+  carId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Car'
   }
 }, {
   timestamps: true

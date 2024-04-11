@@ -1,5 +1,7 @@
 const carRouter = require("express").Router();
 const carController = require("../controllers/car.controller");
+const { findCar } = require("../middlewares/findCar.mw");
+const reviewRouter = require("./reviewRouter");
 
 carRouter
   .route("/")
@@ -12,4 +14,5 @@ carRouter
   .put(carController.updateCar)
   .delete(carController.deleteCar);
 
+carRouter.use('/:carId/reviews', findCar, reviewRouter)
 module.exports = carRouter;

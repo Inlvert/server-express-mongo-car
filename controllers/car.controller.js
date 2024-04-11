@@ -15,7 +15,7 @@ module.exports.createCar = async (req, res, next) => {
 
 module.exports.findAllCars = async (req, res, next) => {
   try {
-    const cars = await Car.find()
+    const cars = await Car.find().populate('reviews')
     res.send({data: cars});
     
   } catch (error) {
