@@ -1,4 +1,4 @@
-const { Review } = require("../models");
+const { Review, Car } = require("../models");
 
 module.exports.createReview = async (req, res, next) => {
   try {
@@ -58,13 +58,31 @@ module.exports.updateReview = async (req, res, next) => {
     const updateReview = await Review.findByIdAndUpdate(
       {
         _id: reviewId,
-        carId
+        carId,
       },
       body,
       { new: true }
     );
 
     res.send({ data: updateReview });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.deleteReview = async (req, res, next) => {
+  try {
+    const {
+      params: { reviewId },
+      car: { _id: carId },
+      car,
+    } = req;
+
+    const review = await Review.findOneAndDelete({ _id: reviewId, carId });
+
+    await car.updateOne({ $pull: { reviews: reviewId } });
+
+    res.send({ data: review });
   } catch (error) {
     next(error);
   }
