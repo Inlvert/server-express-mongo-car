@@ -1,5 +1,5 @@
 const createHttpError = require("http-errors");
-const { Car } = require("../models");
+const { Car, Review } = require("../models");
 
 module.exports.createCar = async (req, res, next) => {
   try {
@@ -7,7 +7,7 @@ module.exports.createCar = async (req, res, next) => {
 
     const car = await Car.create(body);
 
-    res.status(201).send({data: car})
+    res.status(201).send({ data: car });
   } catch (error) {
     next(error);
   }
@@ -15,59 +15,72 @@ module.exports.createCar = async (req, res, next) => {
 
 module.exports.findAllCars = async (req, res, next) => {
   try {
-    const cars = await Car.find().populate('reviews')
-    res.send({data: cars});
-    
+    const cars = await Car.find().populate("reviews");
+    res.send({ data: cars });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 module.exports.getCar = async (req, res, next) => {
   try {
-    const {params: {carId}} = req;
+    const {
+      params: { carId },
+    } = req;
 
     const car = await Car.findOne({
-      _id: carId
-    })
+      _id: carId,
+    });
 
-    if(!car) {
-      return(next(createHttpError(404, 'car not found')))
+    if (!car) {
+      return next(createHttpError(404, "car not found"));
     }
 
-    res.send({data: car});
-
+    res.send({ data: car });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.updateCar = async (req, res, next) => {
   try {
-    const {params: {carId}, body} = req;
+    const {
+      params: { carId },
+      body,
+    } = req;
 
-    const car = await Car.findOneAndUpdate({
-      _id: carId
-    }, body, {new: true});
+    const car = await Car.findOneAndUpdate(
+      {
+        _id: carId,
+      },
+      body,
+      { new: true }
+    );
 
-    res.send({data: car});
-
+    res.send({ data: car });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.deleteCar = async (req, res, next) => {
   try {
-    const {params: {carId}} = req;
+    const {
+      params: { carId },
+    } = req;
 
-    const car = await Car.findOneAndDelete({_id: carId});
+    const deleteCar = await Car.findOneAndDelete({ _id: carId });
 
-    console.log(car);
+    console.log(deleteCar);
 
-    res.send({data: car});
+    await Review.deleteMany({
+      _id: {
+        $in: deleteCar.reviews
+      },
+    });
 
+    res.send({ data: deleteCar });
   } catch (error) {
     next(error);
   }
-}
+};
