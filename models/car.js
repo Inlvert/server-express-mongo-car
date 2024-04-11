@@ -26,6 +26,10 @@ const carSchema = new Schema ({
   reviews: [{
     type: Schema.Types.ObjectId,
     ref: 'Review'
+  }],
+  dealers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dealer'
   }]
 }, {
   timestamps: true
