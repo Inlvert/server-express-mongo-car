@@ -1,5 +1,5 @@
 const createHttpError = require("http-errors");
-const { Car, Review } = require("../models");
+const { Car, Review, Dealer } = require("../models");
 
 module.exports.createCar = async (req, res, next) => {
   try {
@@ -15,12 +15,12 @@ module.exports.createCar = async (req, res, next) => {
 
 module.exports.findAllCars = async (req, res, next) => {
   try {
-    const cars = await Car.find().populate("reviews");
+    const cars = await Car.find().populate('reviews dealers');
     res.send({ data: cars });
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports.getCar = async (req, res, next) => {
   try {
@@ -71,13 +71,20 @@ module.exports.deleteCar = async (req, res, next) => {
 
     const deleteCar = await Car.findOneAndDelete({ _id: carId });
 
-    console.log(deleteCar);
-
+    
     await Review.deleteMany({
       _id: {
         $in: deleteCar.reviews
       },
     });
+    
+    await Dealer.deleteMany({
+      _id: {
+        $in: deleteCar.dealers
+      }
+    })
+    
+    console.log(deleteCar);
 
     res.send({ data: deleteCar });
   } catch (error) {
