@@ -6,4 +6,10 @@ dealerRouter
   .post(dealerController.createDealer)
   .get(dealerController.getAllDealer);
 
+dealerRouter
+  .route("/:dealerId")
+  .get(dealerController.getDealer)
+  .put(dealerController.updateDealer)
+  .delete(dealerController.deleteDealer);
+
 module.exports = dealerRouter;
