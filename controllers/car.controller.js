@@ -15,12 +15,15 @@ module.exports.createCar = async (req, res, next) => {
 
 module.exports.findAllCars = async (req, res, next) => {
   try {
-    const cars = await Car.find().populate('reviews dealers');
+    const cars = await Car.find().populate({
+      path: "reviews dealers",
+      select: 'bodyText rating autor isRecomendate name address' // view only those fields from {reviews and dealers}
+    });
     res.send({ data: cars });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.getCar = async (req, res, next) => {
   try {
@@ -71,19 +74,18 @@ module.exports.deleteCar = async (req, res, next) => {
 
     const deleteCar = await Car.findOneAndDelete({ _id: carId });
 
-    
     await Review.deleteMany({
       _id: {
-        $in: deleteCar.reviews
+        $in: deleteCar.reviews,
       },
     });
-    
+
     await Dealer.deleteMany({
       _id: {
-        $in: deleteCar.dealers
-      }
-    })
-    
+        $in: deleteCar.dealers,
+      },
+    });
+
     console.log(deleteCar);
 
     res.send({ data: deleteCar });
